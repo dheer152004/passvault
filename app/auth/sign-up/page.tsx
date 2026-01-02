@@ -41,12 +41,20 @@ export default function SignUpPage() {
     }
 
     try {
-      const { error } = await supabase.auth.signUp({
+      // Construct the redirect URL properly
+      const redirectUrl = 
+        process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 
+        `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/setup-master-password`
+
+      // Store username and fullName in session storage temporarily
+      sessionStorage.setItem('signup_username', username)
+      sessionStorage.setItem('signup_fullName', fullName)
+
+      const { error, data } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo:
-            process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || `${window.location.origin}/auth/setup-master-password`,
+          emailRedirectTo: redirectUrl,
           data: {
             username: username,
             full_name: fullName,
@@ -54,8 +62,27 @@ export default function SignUpPage() {
           },
         },
       })
-      if (error) throw error
-      router.push("/auth/sign-up-success")
+      
+      if (error) {
+        // Check if email confirmation is not required (auto-confirm enabled in Supabase)
+        if (data?.user && !error.message.includes('email')) {
+          // User was created successfully, proceed to setup
+          router.push("/auth/setup-master-password")
+          return
+        }
+        throw error
+      }
+      
+      // If user was created, check if email confirmation is required
+      if (data?.user?.identities?.length === 0) {
+        // Email confirmation required - go to sign up success page
+        router.push("/auth/sign-up-success")
+      } else if (data?.user) {
+        // No email confirmation needed (auto-confirm enabled) - proceed to setup
+        router.push("/auth/setup-master-password")
+      } else {
+        router.push("/auth/sign-up-success")
+      }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred")
     } finally {
@@ -109,12 +136,11 @@ export default function SignUpPage() {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="username">Username</Label>
+                    <Label htmlFor="username">Username (Optional)</Label>
                     <Input
                       id="username"
                       type="text"
                       placeholder="johndoe"
-                      required
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                     />

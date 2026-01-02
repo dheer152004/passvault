@@ -163,66 +163,6 @@ export default function PricingPage() {
           </div>
         </section>
       </main>
-
-<footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-8 mt-12">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Product</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/about" className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-                    About
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/privacy" className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-                    Privacy Policy
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Account</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/auth/login" className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-                    Sign In
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/auth/sign-up" className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-                    Sign Up
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Get in Touch</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/contact" className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl flex flex-col items-center justify-center gap-2 py-6 text-sm text-slate-600 dark:text-slate-400">
-          <p>© 2026 PassVault. All rights reserved.</p>
-          <div>
-            <Link href="/" className="hover:text-slate-900 dark:hover:text-slate-100 underline-offset-4">
-              Back to home
-            </Link>
-          </div>
-        </div>
-        </div>
-      </footer>
     </div>
   )
 }

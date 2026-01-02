@@ -75,9 +75,9 @@ export default function SetupMasterPasswordPage() {
       const salt = generateSalt()
       const hash = await hashMasterPassword(masterPassword, salt)
 
-      // Get username, full_name, and email from user metadata if available
-      const username = user.user_metadata?.username || null
-      const fullName = user.user_metadata?.full_name || null
+      // Get username, full_name, and email from session storage (set during signup)
+      const username = sessionStorage.getItem('signup_username') || user.user_metadata?.username || null
+      const fullName = sessionStorage.getItem('signup_fullName') || user.user_metadata?.full_name || null
       const userEmail = user.user_metadata?.email || user.email || null
 
       // Create profile with master password
@@ -91,6 +91,10 @@ export default function SetupMasterPasswordPage() {
       })
 
       if (profileError) throw profileError
+
+      // Clean up session storage
+      sessionStorage.removeItem('signup_username')
+      sessionStorage.removeItem('signup_fullName')
 
       // Store master password in session storage for vault unlock
       sessionStorage.setItem("mp_temp", masterPassword)

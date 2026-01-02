@@ -154,7 +154,7 @@ export default function VaultPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-slate-950 dark:to-slate-900">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm">
+      {/* <header className="sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl flex h-16 items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
@@ -227,7 +227,7 @@ export default function VaultPage() {
             <ProfileDropdown />
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* Main Content Container */}
       <div className="flex w-full">

@@ -5,7 +5,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 export default function HomePage() {
   return (
     <div className="flex min-h-svh flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-blue-950 dark:to-slate-900">
-      <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm">
+      {/* <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <img src="/PASSVAULT_blue.png" alt="PassVault" className="h-10 w-auto" />
@@ -24,7 +24,7 @@ export default function HomePage() {
             </Button>
           </div>
         </div>
-      </header>
+      </header> */}
 
       <main className="flex-1">
         <section className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl flex flex-col items-center justify-center gap-8 py-24 text-center md:py-32 w-full">
@@ -139,13 +139,6 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-
-      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl flex flex-col items-center justify-center gap-2 py-6 text-sm text-slate-600 dark:text-slate-400">
-          <p>© 2026 PassVault. All rights reserved.</p>
-          <p>Secure password management for everyone</p>
-        </div>
-      </footer>
     </div>
   )
 }

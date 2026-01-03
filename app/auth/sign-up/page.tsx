@@ -2,7 +2,6 @@
 
 import type React from "react"
 
-import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,12 +9,9 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("")
-  const [username, setUsername] = useState("")
-  const [fullName, setFullName] = useState("")
   const [password, setPassword] = useState("")
   const [repeatPassword, setRepeatPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -24,7 +20,6 @@ export default function SignUpPage() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
-    const supabase = createClient()
     setIsLoading(true)
     setError(null)
 
@@ -41,48 +36,24 @@ export default function SignUpPage() {
     }
 
     try {
-      // Construct the redirect URL properly
-      const redirectUrl = 
-        process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL || 
-        `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/setup-master-password`
-
-      // Store username and fullName in session storage temporarily
-      sessionStorage.setItem('signup_username', username)
-      sessionStorage.setItem('signup_fullName', fullName)
-
-      const { error, data } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            username: username,
-            full_name: fullName,
-            email: email,
-          },
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       })
-      
-      if (error) {
-        // Check if email confirmation is not required (auto-confirm enabled in Supabase)
-        if (data?.user && !error.message.includes('email')) {
-          // User was created successfully, proceed to setup
-          router.push("/auth/setup-master-password")
-          return
-        }
-        throw error
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Sign up failed")
       }
-      
-      // If user was created, check if email confirmation is required
-      if (data?.user?.identities?.length === 0) {
-        // Email confirmation required - go to sign up success page
-        router.push("/auth/sign-up-success")
-      } else if (data?.user) {
-        // No email confirmation needed (auto-confirm enabled) - proceed to setup
-        router.push("/auth/setup-master-password")
-      } else {
-        router.push("/auth/sign-up-success")
-      }
+
+      router.push("/auth/sign-up-success")
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred")
     } finally {
@@ -91,12 +62,9 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="w-full max-w-sm">
         <div className="flex flex-col gap-6">
-          <div className="flex justify-end">
-            <ThemeToggle />
-          </div>
           <div className="flex flex-col items-center gap-2 text-center">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500">
               <svg
@@ -113,38 +81,17 @@ export default function SignUpPage() {
                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">PassVault</h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400">Your secure password manager</p>
+            <h1 className="text-2xl font-bold text-slate-900">SecureVault</h1>
+            <p className="text-sm text-slate-600">Your secure password manager</p>
           </div>
           <Card>
             <CardHeader>
               <CardTitle className="text-2xl">Create account</CardTitle>
-              <CardDescription>Enter your email to get started with PassVault</CardDescription>
+              <CardDescription>Enter your email to get started with SecureVault</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSignUp}>
                 <div className="flex flex-col gap-6">
-                  <div className="grid gap-2">
-                    <Label htmlFor="full-name">Full Name</Label>
-                    <Input
-                      id="full-name"
-                      type="text"
-                      placeholder="John Doe"
-                      required
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="username">Username (Optional)</Label>
-                    <Input
-                      id="username"
-                      type="text"
-                      placeholder="johndoe"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                    />
-                  </div>
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
                     <Input

@@ -14,14 +14,12 @@ import { Loader2 } from "lucide-react"
 
 interface UserProfile {
   full_name: string | null
-  username: string | null
   email: string | null
 }
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile>({
     full_name: null,
-    username: null,
     email: null,
   })
   const [password, setPassword] = useState("")
@@ -51,7 +49,7 @@ export default function ProfilePage() {
       // Fetch profile data
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")
-        .select("full_name, username, email")
+        .select("full_name, email")
         .eq("id", user.id)
         .single()
 
@@ -60,7 +58,6 @@ export default function ProfilePage() {
       } else {
         setProfile({
           full_name: profileData?.full_name || null,
-          username: profileData?.username || null,
           email: profileData?.email || user.email || null,
         })
       }
@@ -90,7 +87,6 @@ export default function ProfilePage() {
         .from("profiles")
         .update({
           full_name: profile.full_name,
-          username: profile.username,
         })
         .eq("id", user.id)
 
@@ -201,17 +197,6 @@ export default function ProfilePage() {
                     placeholder="John Doe"
                     value={profile.full_name || ""}
                     onChange={(e) => setProfile({ ...profile, full_name: e.target.value })}
-                  />
-                </div>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="username">Username</Label>
-                  <Input
-                    id="username"
-                    type="text"
-                    placeholder="johndoe"
-                    value={profile.username || ""}
-                    onChange={(e) => setProfile({ ...profile, username: e.target.value })}
                   />
                 </div>
 

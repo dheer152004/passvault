@@ -104,7 +104,7 @@ export default function LoginPage() {
               <form onSubmit={handleLogin}>
                 <div className="flex flex-col gap-6">
                   <div className="grid gap-2">
-                    <Label htmlFor="email-or-username">Email or Username</Label>
+                    <Label htmlFor="email-or-username">Email</Label>
                     <Input
                       id="email-or-username"
                       type="text"

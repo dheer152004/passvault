@@ -19,7 +19,6 @@ import { getFaviconUrl } from "@/lib/favicon"
 interface Password {
   id: string
   title: string
-  username: string | null
   email: string | null
   encrypted_password: string
   website_url: string | null
@@ -132,7 +131,6 @@ export default function VaultPage() {
   const filteredPasswords = passwords.filter((password) => {
     const matchesSearch =
       password.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      password.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       password.email?.toLowerCase().includes(searchQuery.toLowerCase())
 
     const matchesCategory = !selectedCategory || password.category_id === selectedCategory
@@ -545,7 +543,7 @@ export default function VaultPage() {
                                 )}
                               </div>
                               <p className="text-sm text-slate-600 dark:text-slate-100">
-                                {password.username || password.email || "No username"}
+                                {password.email || "No email"}
                               </p>
                             </div>
                           </div>

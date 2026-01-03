@@ -15,7 +15,6 @@ import { PasswordGenerator } from "@/components/password-generator"
 interface Password {
   id: string
   title: string
-  username: string | null
   email: string | null
   encrypted_password: string
   website_url: string | null
@@ -40,7 +39,6 @@ interface EditPasswordModalProps {
 
 export function EditPasswordModal({ open, onClose, password, categories, onSuccess }: EditPasswordModalProps) {
   const [title, setTitle] = useState("")
-  const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [passwordValue, setPasswordValue] = useState("")
   const [websiteUrl, setWebsiteUrl] = useState("")
@@ -54,7 +52,6 @@ export function EditPasswordModal({ open, onClose, password, categories, onSucce
   useEffect(() => {
     if (open && password) {
       setTitle(password.title)
-      setUsername(password.username || "")
       setEmail(password.email || "")
       setWebsiteUrl(password.website_url || "")
       setNotes(password.notes || "")
@@ -114,7 +111,6 @@ export function EditPasswordModal({ open, onClose, password, categories, onSucce
         .from("passwords")
         .update({
           title,
-          username: username || null,
           email: email || null,
           encrypted_password: encryptedPassword,
           website_url: websiteUrl || null,
@@ -173,26 +169,15 @@ export function EditPasswordModal({ open, onClose, password, categories, onSucce
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                placeholder="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="email@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="email@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
 
           <div className="space-y-2">

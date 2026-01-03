@@ -35,7 +35,7 @@ export async function deriveMasterKey(masterPassword: string): Promise<CryptoKey
   return crypto.subtle.deriveKey(
     {
       name: "PBKDF2",
-      salt: encoder.encode("passvault-salt"),
+      salt: encoder.encode("securevault-salt"),
       iterations: 100000,
       hash: "SHA-256",
     },

@@ -27,7 +27,6 @@ interface AddPasswordModalProps {
 
 export function AddPasswordModal({ open, onClose, categories, onSuccess }: AddPasswordModalProps) {
   const [title, setTitle] = useState("")
-  const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [websiteUrl, setWebsiteUrl] = useState("")
@@ -65,7 +64,6 @@ export function AddPasswordModal({ open, onClose, categories, onSuccess }: AddPa
       const { error: insertError } = await supabase.from("passwords").insert({
         user_id: user.id,
         title,
-        username: username || null,
         email: email || null,
         encrypted_password: encryptedPassword,
         website_url: websiteUrl || null,
@@ -78,7 +76,6 @@ export function AddPasswordModal({ open, onClose, categories, onSuccess }: AddPa
 
       // Reset form
       setTitle("")
-      setUsername("")
       setEmail("")
       setPassword("")
       setWebsiteUrl("")
@@ -133,26 +130,15 @@ export function AddPasswordModal({ open, onClose, categories, onSuccess }: AddPa
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                placeholder="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="email@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="email@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
 
           <div className="space-y-2">

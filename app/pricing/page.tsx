@@ -1,9 +1,9 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { Button } from "@/src/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/src/components/ui/accordion"
+import { ThemeToggle } from "@/src/components/theme-toggle"
 import Link from "next/link"
 import { Check } from "lucide-react"
 

@@ -1,13 +1,13 @@
 import { createClient } from "@/lib/supabase/client"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/src/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+} from "@/src/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback } from "@/src/components/ui/avatar"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { LogOut, Settings, User } from "lucide-react"

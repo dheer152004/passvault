@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/src/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
+import { Label } from "@/src/components/ui/label"
+import { Slider } from "@/src/components/ui/slider"
+import { Switch } from "@/src/components/ui/switch"
+import { Input } from "@/src/components/ui/input"
 
 interface PasswordGeneratorProps {
   onUsePassword?: (password: string) => void

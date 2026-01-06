@@ -7,10 +7,10 @@ import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { encryptData, decryptData } from "@/lib/crypto"
 import { generateTOTP, getRemainingSeconds, parseOTPAuthURI } from "@/lib/totp"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/src/components/ui/button"
+import { Card, CardContent } from "@/src/components/ui/card"
+import { Input } from "@/src/components/ui/input"
+import { Label } from "@/src/components/ui/label"
 import {
   Dialog,
   DialogContent,
@@ -18,10 +18,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Badge } from "@/components/ui/badge"
+} from "@/src/components/ui/dialog"
+import { Badge } from "@/src/components/ui/badge"
 import Link from "next/link"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { ThemeToggle } from "@/src/components/theme-toggle"
 
 interface Authenticator {
   id: string

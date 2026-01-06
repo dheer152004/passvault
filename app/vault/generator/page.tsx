@@ -1,8 +1,8 @@
 "use client"
 
 import { createClient } from "@/lib/supabase/client"
-import { Button } from "@/components/ui/button"
-import { PasswordGenerator } from "@/components/password-generator"
+import { Button } from "@/src/components/ui/button"
+import { PasswordGenerator } from "@/src/components/password-generator"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 

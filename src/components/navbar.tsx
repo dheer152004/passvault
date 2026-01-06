@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { ThemeToggle } from "@/src/components/theme-toggle"
 import { Menu, X } from "lucide-react"
 
 export default function Navbar() {

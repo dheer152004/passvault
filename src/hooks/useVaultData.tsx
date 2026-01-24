@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 import { useEncryption } from "./useEncryption";
-import { encryptObject, decryptArray } from "@/lib/crypto";
+import { encryptObject, decryptArray, decryptObject } from "@/lib/crypto";
 import { SENSITIVE_FIELDS } from "@/lib/sensitiveFields";
 import { toast } from "sonner";
 
@@ -285,5 +285,52 @@ export function useVaultData() {
     }
   }, [isAuthenticated, user?.id, isUnlocked, fetchAllData]);
 
- 
+  // CRUD operations for passwords (with encryption)
+  const addPassword = async (data: Omit<DbPassword, "id" | "user_id" | "created_at" | "updated_at">) => {
+    if (!user?.id || !encryptionKey) return;
+    
+    // Encrypt sensitive fields before saving
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.passwords as unknown as (keyof typeof data)[]);
+    
+    const { data: newItem, error } = await supabase
+      .from("passwords")
+      .insert({ ...encrypted, user_id: user.id })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Failed to add password");
+      return;
+    }
+    
+    // Decrypt for local state
+    const decrypted = await decryptObject(newItem, encryptionKey, SENSITIVE_FIELDS.passwords as unknown as (keyof DbPassword)[]);
+    setPasswords(prev => [decrypted, ...prev]);
+    toast.success("Password added securely");
+  };
+
+  const updatePassword = async (id: string, data: Partial<DbPassword>) => {
+    if (!encryptionKey) return;
+    
+    // Encrypt sensitive fields
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.passwords as unknown as (keyof typeof data)[]);
+    
+    const { error } = await supabase.from("passwords").update(encrypted).eq("id", id);
+    if (error) {
+      toast.error("Failed to update password");
+      return;
+    }
+    setPasswords(prev => prev.map(p => p.id === id ? { ...p, ...data } : p));
+    toast.success("Password updated securely");
+  };
+
+  const deletePassword = async (id: string) => {
+    const { error } = await supabase.from("passwords").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete password");
+      return;
+    }
+    setPasswords(prev => prev.filter(p => p.id !== id));
+    toast.success("Password deleted successfully");
+  };
+
 }

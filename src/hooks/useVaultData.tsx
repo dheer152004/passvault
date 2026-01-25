@@ -333,4 +333,93 @@ export function useVaultData() {
     toast.success("Password deleted successfully");
   };
 
+  // CRUD operations for notes (with encryption)
+  const addNote = async (data: Omit<DbNote, "id" | "user_id" | "created_at" | "updated_at">) => {
+    if (!user?.id || !encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.notes as unknown as (keyof typeof data)[]);
+    
+    const { data: newItem, error } = await supabase
+      .from("notes")
+      .insert({ ...encrypted, user_id: user.id })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Failed to add note");
+      return;
+    }
+    
+    const decrypted = await decryptObject(newItem, encryptionKey, SENSITIVE_FIELDS.notes as unknown as (keyof DbNote)[]);
+    setNotes(prev => [decrypted, ...prev]);
+    toast.success("Note added securely");
+  };
+
+  const updateNote = async (id: string, data: Partial<DbNote>) => {
+    if (!encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.notes as unknown as (keyof typeof data)[]);
+    
+    const { error } = await supabase.from("notes").update(encrypted).eq("id", id);
+    if (error) {
+      toast.error("Failed to update note");
+      return;
+    }
+    setNotes(prev => prev.map(n => n.id === id ? { ...n, ...data } : n));
+    toast.success("Note updated securely");
+  };
+
+  const deleteNote = async (id: string) => {
+    const { error } = await supabase.from("notes").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete note");
+      return;
+    }
+    setNotes(prev => prev.filter(n => n.id !== id));
+    toast.success("Note deleted successfully");
+  };
+
+  // CRUD operations for cards (with encryption)
+  const addCard = async (data: Omit<DbCard, "id" | "user_id" | "created_at" | "updated_at">) => {
+    if (!user?.id || !encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.cards as unknown as (keyof typeof data)[]);
+    
+    const { data: newItem, error } = await supabase
+      .from("cards")
+      .insert({ ...encrypted, user_id: user.id })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Failed to add card");
+      return;
+    }
+    
+    const decrypted = await decryptObject(newItem, encryptionKey, SENSITIVE_FIELDS.cards as unknown as (keyof DbCard)[]);
+    setCards(prev => [decrypted, ...prev]);
+    toast.success("Card added securely");
+  };
+
+  const updateCard = async (id: string, data: Partial<DbCard>) => {
+    if (!encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.cards as unknown as (keyof typeof data)[]);
+    
+    const { error } = await supabase.from("cards").update(encrypted).eq("id", id);
+    if (error) {
+      toast.error("Failed to update card");
+      return;
+    }
+    setCards(prev => prev.map(c => c.id === id ? { ...c, ...data } : c));
+    toast.success("Card updated securely");
+  };
+
+  const deleteCard = async (id: string) => {
+    const { error } = await supabase.from("cards").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete card");
+      return;
+    }
+    setCards(prev => prev.filter(c => c.id !== id));
+    toast.success("Card deleted successfully");
+  };
 }

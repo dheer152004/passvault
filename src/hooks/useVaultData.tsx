@@ -422,4 +422,94 @@ export function useVaultData() {
     setCards(prev => prev.filter(c => c.id !== id));
     toast.success("Card deleted successfully");
   };
+
+  // CRUD operations for addresses (with encryption)
+  const addAddress = async (data: Omit<DbAddress, "id" | "user_id" | "created_at" | "updated_at">) => {
+    if (!user?.id || !encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.addresses as unknown as (keyof typeof data)[]);
+    
+    const { data: newItem, error } = await supabase
+      .from("addresses")
+      .insert({ ...encrypted, user_id: user.id })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Failed to add address");
+      return;
+    }
+    
+    const decrypted = await decryptObject(newItem, encryptionKey, SENSITIVE_FIELDS.addresses as unknown as (keyof DbAddress)[]);
+    setAddresses(prev => [decrypted, ...prev]);
+    toast.success("Address added securely");
+  };
+
+  const updateAddress = async (id: string, data: Partial<DbAddress>) => {
+    if (!encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.addresses as unknown as (keyof typeof data)[]);
+    
+    const { error } = await supabase.from("addresses").update(encrypted).eq("id", id);
+    if (error) {
+      toast.error("Failed to update address");
+      return;
+    }
+    setAddresses(prev => prev.map(a => a.id === id ? { ...a, ...data } : a));
+    toast.success("Address updated securely");
+  };
+
+  const deleteAddress = async (id: string) => {
+    const { error } = await supabase.from("addresses").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete address");
+      return;
+    }
+    setAddresses(prev => prev.filter(a => a.id !== id));
+    toast.success("Address deleted successfully");
+  };
+
+  // CRUD operations for TOTPs (with encryption)
+  const addTOTP = async (data: Omit<DbTOTP, "id" | "user_id" | "created_at" | "updated_at">) => {
+    if (!user?.id || !encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.totp_authenticators as unknown as (keyof typeof data)[]);
+    
+    const { data: newItem, error } = await supabase
+      .from("totp_authenticators")
+      .insert({ ...encrypted, user_id: user.id })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Failed to add authenticator");
+      return;
+    }
+    
+    const decrypted = await decryptObject(newItem, encryptionKey, SENSITIVE_FIELDS.totp_authenticators as unknown as (keyof DbTOTP)[]);
+    setTotps(prev => [decrypted, ...prev]);
+    toast.success("Authenticator added securely");
+  };
+
+  const updateTOTP = async (id: string, data: Partial<DbTOTP>) => {
+    if (!encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.totp_authenticators as unknown as (keyof typeof data)[]);
+    
+    const { error } = await supabase.from("totp_authenticators").update(encrypted).eq("id", id);
+    if (error) {
+      toast.error("Failed to update authenticator");
+      return;
+    }
+    setTotps(prev => prev.map(t => t.id === id ? { ...t, ...data } : t));
+    toast.success("Authenticator updated securely");
+  };
+
+  const deleteTOTP = async (id: string) => {
+    const { error } = await supabase.from("totp_authenticators").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete authenticator");
+      return;
+    }
+    setTotps(prev => prev.filter(t => t.id !== id));
+    toast.success("Authenticator deleted successfully");
+  };
 }

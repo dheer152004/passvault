@@ -512,4 +512,339 @@ export function useVaultData() {
     setTotps(prev => prev.filter(t => t.id !== id));
     toast.success("Authenticator deleted successfully");
   };
+
+  // CRUD operations for ID cards (with encryption)
+  const addIDCard = async (data: Omit<DbIDCard, "id" | "user_id" | "created_at" | "updated_at">) => {
+    if (!user?.id || !encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.id_cards as unknown as (keyof typeof data)[]);
+    
+    const { data: newItem, error } = await supabase
+      .from("id_cards")
+      .insert({ ...encrypted, user_id: user.id })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Failed to add ID card");
+      return;
+    }
+    
+    const decrypted = await decryptObject(newItem, encryptionKey, SENSITIVE_FIELDS.id_cards as unknown as (keyof DbIDCard)[]);
+    setIdCards(prev => [decrypted, ...prev]);
+    toast.success("ID card added securely");
+  };
+
+  const updateIDCard = async (id: string, data: Partial<DbIDCard>) => {
+    if (!encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.id_cards as unknown as (keyof typeof data)[]);
+    
+    const { error } = await supabase.from("id_cards").update(encrypted).eq("id", id);
+    if (error) {
+      toast.error("Failed to update ID card");
+      return;
+    }
+    setIdCards(prev => prev.map(c => c.id === id ? { ...c, ...data } : c));
+    toast.success("ID card updated securely");
+  };
+
+  const deleteIDCard = async (id: string) => {
+    const { error } = await supabase.from("id_cards").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete ID card");
+      return;
+    }
+    setIdCards(prev => prev.filter(c => c.id !== id));
+    toast.success("ID card deleted successfully");
+  };
+
+  // CRUD operations for SSH keys (with encryption)
+  const addSSHKey = async (data: Omit<DbSSHKey, "id" | "user_id" | "created_at" | "updated_at">) => {
+    if (!user?.id || !encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.ssh_keys as unknown as (keyof typeof data)[]);
+    
+    const { data: newItem, error } = await supabase
+      .from("ssh_keys")
+      .insert({ ...encrypted, user_id: user.id })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Failed to add SSH key");
+      return;
+    }
+    
+    const decrypted = await decryptObject(newItem, encryptionKey, SENSITIVE_FIELDS.ssh_keys as unknown as (keyof DbSSHKey)[]);
+    setSshKeys(prev => [decrypted, ...prev]);
+    toast.success("SSH key added securely");
+  };
+
+  const updateSSHKey = async (id: string, data: Partial<DbSSHKey>) => {
+    if (!encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.ssh_keys as unknown as (keyof typeof data)[]);
+    
+    const { error } = await supabase.from("ssh_keys").update(encrypted).eq("id", id);
+    if (error) {
+      toast.error("Failed to update SSH key");
+      return;
+    }
+    setSshKeys(prev => prev.map(k => k.id === id ? { ...k, ...data } : k));
+    toast.success("SSH key updated securely");
+  };
+
+  const deleteSSHKey = async (id: string) => {
+    const { error } = await supabase.from("ssh_keys").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete SSH key");
+      return;
+    }
+    setSshKeys(prev => prev.filter(k => k.id !== id));
+    toast.success("SSH key deleted successfully");
+  };
+
+  // CRUD operations for crypto wallets (with encryption)
+  const addCryptoWallet = async (data: Omit<DbCryptoWallet, "id" | "user_id" | "created_at" | "updated_at">) => {
+    if (!user?.id || !encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.crypto_wallets as unknown as (keyof typeof data)[]);
+    
+    const { data: newItem, error } = await supabase
+      .from("crypto_wallets")
+      .insert({ ...encrypted, user_id: user.id })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Failed to add crypto wallet");
+      return;
+    }
+    
+    const decrypted = await decryptObject(newItem, encryptionKey, SENSITIVE_FIELDS.crypto_wallets as unknown as (keyof DbCryptoWallet)[]);
+    setCryptoWallets(prev => [decrypted, ...prev]);
+    toast.success("Crypto wallet added securely");
+  };
+
+  const updateCryptoWallet = async (id: string, data: Partial<DbCryptoWallet>) => {
+    if (!encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.crypto_wallets as unknown as (keyof typeof data)[]);
+    
+    const { error } = await supabase.from("crypto_wallets").update(encrypted).eq("id", id);
+    if (error) {
+      toast.error("Failed to update crypto wallet");
+      return;
+    }
+    setCryptoWallets(prev => prev.map(w => w.id === id ? { ...w, ...data } : w));
+    toast.success("Crypto wallet updated securely");
+  };
+
+  const deleteCryptoWallet = async (id: string) => {
+    const { error } = await supabase.from("crypto_wallets").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete crypto wallet");
+      return;
+    }
+    setCryptoWallets(prev => prev.filter(w => w.id !== id));
+    toast.success("Crypto wallet deleted successfully");
+  };
+
+  // CRUD operations for bank accounts (with encryption)
+  const addBankAccount = async (data: Omit<DbBankAccount, "id" | "user_id" | "created_at" | "updated_at">) => {
+    if (!user?.id || !encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.bank_accounts as unknown as (keyof typeof data)[]);
+    
+    const { data: newItem, error } = await supabase
+      .from("bank_accounts")
+      .insert({ ...encrypted, user_id: user.id })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Failed to add bank account");
+      return;
+    }
+    
+    const decrypted = await decryptObject(newItem, encryptionKey, SENSITIVE_FIELDS.bank_accounts as unknown as (keyof DbBankAccount)[]);
+    setBankAccounts(prev => [decrypted, ...prev]);
+    toast.success("Bank account added securely");
+  };
+
+  const updateBankAccount = async (id: string, data: Partial<DbBankAccount>) => {
+    if (!encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.bank_accounts as unknown as (keyof typeof data)[]);
+    
+    const { error } = await supabase.from("bank_accounts").update(encrypted).eq("id", id);
+    if (error) {
+      toast.error("Failed to update bank account");
+      return;
+    }
+    setBankAccounts(prev => prev.map(a => a.id === id ? { ...a, ...data } : a));
+    toast.success("Bank account updated securely");
+  };
+
+  const deleteBankAccount = async (id: string) => {
+    const { error } = await supabase.from("bank_accounts").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete bank account");
+      return;
+    }
+    setBankAccounts(prev => prev.filter(a => a.id !== id));
+    toast.success("Bank account deleted successfully");
+  };
+
+  // CRUD operations for software licenses (with encryption)
+  const addSoftwareLicense = async (data: Omit<DbSoftwareLicense, "id" | "user_id" | "created_at" | "updated_at">) => {
+    if (!user?.id || !encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.software_licenses as unknown as (keyof typeof data)[]);
+    
+    const { data: newItem, error } = await supabase
+      .from("software_licenses")
+      .insert({ ...encrypted, user_id: user.id })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Failed to add software license");
+      return;
+    }
+    
+    const decrypted = await decryptObject(newItem, encryptionKey, SENSITIVE_FIELDS.software_licenses as unknown as (keyof DbSoftwareLicense)[]);
+    setSoftwareLicenses(prev => [decrypted, ...prev]);
+    toast.success("Software license added securely");
+  };
+
+  const updateSoftwareLicense = async (id: string, data: Partial<DbSoftwareLicense>) => {
+    if (!encryptionKey) return;
+    
+    const encrypted = await encryptObject(data, encryptionKey, SENSITIVE_FIELDS.software_licenses as unknown as (keyof typeof data)[]);
+    
+    const { error } = await supabase.from("software_licenses").update(encrypted).eq("id", id);
+    if (error) {
+      toast.error("Failed to update software license");
+      return;
+    }
+    setSoftwareLicenses(prev => prev.map(l => l.id === id ? { ...l, ...data } : l));
+    toast.success("Software license updated securely");
+  };
+
+  const deleteSoftwareLicense = async (id: string) => {
+    const { error } = await supabase.from("software_licenses").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete software license");
+      return;
+    }
+    setSoftwareLicenses(prev => prev.filter(l => l.id !== id));
+    toast.success("Software license deleted successfully");
+  };
+
+  // CRUD operations for vaults (no encryption needed - just metadata)
+  const addVault = async (data: Omit<DbVault, "id" | "user_id" | "created_at" | "updated_at">) => {
+    if (!user?.id) return;
+    const { data: newItem, error } = await supabase
+      .from("vaults")
+      .insert({ ...data, user_id: user.id })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Failed to add vault");
+      return;
+    }
+    setVaults(prev => [newItem, ...prev]);
+    toast.success("Vault created successfully");
+    return newItem;
+  };
+
+  const updateVault = async (id: string, data: Partial<DbVault>) => {
+    const { error } = await supabase.from("vaults").update(data).eq("id", id);
+    if (error) {
+      toast.error("Failed to update vault");
+      return;
+    }
+    setVaults(prev => prev.map(v => v.id === id ? { ...v, ...data } : v));
+    toast.success("Vault updated successfully");
+  };
+
+  const deleteVault = async (id: string) => {
+    const { error } = await supabase.from("vaults").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete vault");
+      return;
+    }
+    setVaults(prev => prev.filter(v => v.id !== id));
+    toast.success("Vault deleted successfully");
+  };
+
+  return {
+    isLoading,
+    refetch: fetchAllData,
+    
+    // Data
+    passwords,
+    notes,
+    cards,
+    addresses,
+    totps,
+    idCards,
+    sshKeys,
+    cryptoWallets,
+    bankAccounts,
+    softwareLicenses,
+    vaults,
+    
+    // Password operations
+    addPassword,
+    updatePassword,
+    deletePassword,
+    
+    // Note operations
+    addNote,
+    updateNote,
+    deleteNote,
+    
+    // Card operations
+    addCard,
+    updateCard,
+    deleteCard,
+    
+    // Address operations
+    addAddress,
+    updateAddress,
+    deleteAddress,
+    
+    // TOTP operations
+    addTOTP,
+    updateTOTP,
+    deleteTOTP,
+    
+    // ID Card operations
+    addIDCard,
+    updateIDCard,
+    deleteIDCard,
+    
+    // SSH Key operations
+    addSSHKey,
+    updateSSHKey,
+    deleteSSHKey,
+    
+    // Crypto Wallet operations
+    addCryptoWallet,
+    updateCryptoWallet,
+    deleteCryptoWallet,
+    
+    // Bank Account operations
+    addBankAccount,
+    updateBankAccount,
+    deleteBankAccount,
+    
+    // Software License operations
+    addSoftwareLicense,
+    updateSoftwareLicense,
+    deleteSoftwareLicense,
+    
+    // Vault operations
+    addVault,
+    updateVault,
+    deleteVault,
+  };
 }

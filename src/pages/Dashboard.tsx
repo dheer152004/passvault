@@ -15,6 +15,17 @@ import { DashboardSidebar, SectionType } from "@/components/dashboard/DashboardS
 import { MobileSectionIndicator } from "@/components/dashboard/MobileSectionIndicator";
 import { PullToRefresh } from "@/components/dashboard/PullToRefresh";
 import { PasswordsSection, Password, Category, defaultCategories } from "@/components/dashboard/PasswordsSection";
+import { NotesSection, Note } from "@/components/dashboard/NotesSection";
+import { CardsSection, Card } from "@/components/dashboard/CardsSection";
+import { AddressesSection, Address } from "@/components/dashboard/AddressesSection";
+import { TOTPSection, TOTP } from "@/components/dashboard/TOTPSection";
+import { IDCardsSection, IDCard } from "@/components/dashboard/IDCardsSection";
+import { ShareSection } from "@/components/dashboard/ShareSection";
+import { SSHKeysSection, SSHKey } from "@/components/dashboard/SSHKeysSection";
+import { CryptoSection, CryptoWallet } from "@/components/dashboard/CryptoSection";
+import { BankInfoSection, BankAccount } from "@/components/dashboard/BankInfoSection";
+import { SoftwareLicensesSection, SoftwareLicense } from "@/components/dashboard/SoftwareLicensesSection";
+import { ToolsSection } from "@/components/dashboard/ToolsSection";
 
 // Transform database types to component types
 const transformPassword = (p: any): Password => ({
@@ -598,7 +609,101 @@ export default function Dashboard() {
     });
   };
 
+  const handleSetBankAccounts: React.Dispatch<React.SetStateAction<BankAccount[]>> = (updater) => {
+    setBankAccounts(prev => {
+      const newAccounts = typeof updater === 'function' ? updater(prev) : updater;
+      
+      const added = newAccounts.filter(n => !prev.find(p => p.id === n.id));
+      added.forEach(a => {
+        vaultData.addBankAccount({
+          name: a.name,
+          bank_name: a.bankName,
+          account_type: a.accountType,
+          account_number: a.accountNumber,
+          routing_number: a.routingNumber,
+          iban: a.ibanNumber,
+          swift_bic: a.swiftCode,
+          branch_name: a.branchName,
+          branch_address: a.accountHolderName,
+          notes: a.notes,
+          is_favorite: a.isFavorite || false,
+          vault_id: a.vaultId || null,
+        });
+      });
 
+      const deleted = prev.filter(p => !newAccounts.find(n => n.id === p.id));
+      deleted.forEach(a => vaultData.deleteBankAccount(a.id));
+
+      newAccounts.forEach(n => {
+        const old = prev.find(p => p.id === n.id);
+        if (old && JSON.stringify(old) !== JSON.stringify(n)) {
+          vaultData.updateBankAccount(n.id, {
+            name: n.name,
+            bank_name: n.bankName,
+            account_type: n.accountType,
+            account_number: n.accountNumber,
+            routing_number: n.routingNumber,
+            iban: n.ibanNumber,
+            swift_bic: n.swiftCode,
+            branch_name: n.branchName,
+            branch_address: n.accountHolderName,
+            notes: n.notes,
+            is_favorite: n.isFavorite || false,
+            vault_id: n.vaultId || null,
+          });
+        }
+      });
+
+      return newAccounts;
+    });
+  };
+
+  const handleSetSoftwareLicenses: React.Dispatch<React.SetStateAction<SoftwareLicense[]>> = (updater) => {
+    setSoftwareLicenses(prev => {
+      const newLicenses = typeof updater === 'function' ? updater(prev) : updater;
+      
+      const added = newLicenses.filter(n => !prev.find(p => p.id === n.id));
+      added.forEach(l => {
+        vaultData.addSoftwareLicense({
+          name: l.name,
+          software_type: l.software,
+          license_key: l.licenseKey,
+          email: l.email,
+          password: l.password,
+          purchase_date: l.purchaseDate,
+          expiry_date: l.expiryDate,
+          website: l.website,
+          notes: l.notes,
+          is_favorite: l.isFavorite || false,
+          vault_id: l.vaultId || null,
+        });
+      });
+
+      const deleted = prev.filter(p => !newLicenses.find(n => n.id === p.id));
+      deleted.forEach(l => vaultData.deleteSoftwareLicense(l.id));
+
+      newLicenses.forEach(n => {
+        const old = prev.find(p => p.id === n.id);
+        if (old && JSON.stringify(old) !== JSON.stringify(n)) {
+          vaultData.updateSoftwareLicense(n.id, {
+            name: n.name,
+            software_type: n.software,
+            license_key: n.licenseKey,
+            email: n.email,
+            password: n.password,
+            purchase_date: n.purchaseDate,
+            expiry_date: n.expiryDate,
+            website: n.website,
+            notes: n.notes,
+            is_favorite: n.isFavorite || false,
+            vault_id: n.vaultId || null,
+          });
+        }
+      });
+
+      return newLicenses;
+    });
+  };
 
   // Filter helper: match vault or default vault for items without vaultId
   const matchesVault = (itemVaultId?: string) => {
@@ -675,4 +780,386 @@ export default function Dashboard() {
       const hasFavoriteCryptoWallets = vaultCryptoWallets.some(c => c.isFavorite);
       const hasFavoriteBankAccounts = vaultBankAccounts.some(b => b.isFavorite);
       const hasFavoriteLicenses = vaultSoftwareLicenses.some(s => s.isFavorite);
+      
+      return (
+        <div className="space-y-8">
+          <div>
+            <h2 className="text-xl font-semibold text-foreground mb-4">Favorites</h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              All your favorited items in one place
+            </p>
+          </div>
+          
+          {hasFavoritePasswords && (
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4">Passwords</h3>
+              <PasswordsSection
+                passwords={passwords}
+                setPasswords={handleSetPasswords}
+                customCategories={customCategories}
+                setCustomCategories={setCustomCategories}
+                showFavoritesOnly={true}
+                activeVaultId={activeVaultId}
+              />
+            </div>
+          )}
+          
+          {hasFavoriteNotes && (
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4">Notes</h3>
+              <NotesSection
+                notes={notes}
+                setNotes={handleSetNotes}
+                showFavoritesOnly={true}
+                activeVaultId={activeVaultId}
+              />
+            </div>
+          )}
+          
+          {hasFavoriteCards && (
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4">Cards</h3>
+              <CardsSection
+                cards={cards}
+                setCards={handleSetCards}
+                showFavoritesOnly={true}
+                activeVaultId={activeVaultId}
+              />
+            </div>
+          )}
+          
+          {hasFavoriteAddresses && (
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4">Addresses</h3>
+              <AddressesSection
+                addresses={addresses}
+                setAddresses={handleSetAddresses}
+                showFavoritesOnly={true}
+                activeVaultId={activeVaultId}
+              />
+            </div>
+          )}
+          
+          {hasFavoriteTotps && (
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4">Authenticator</h3>
+              <TOTPSection
+                totps={totps}
+                setTotps={handleSetTotps}
+                showFavoritesOnly={true}
+                activeVaultId={activeVaultId}
+              />
+            </div>
+          )}
+          
+          {hasFavoriteIdCards && (
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4">ID Cards</h3>
+              <IDCardsSection
+                idCards={idCards}
+                setIdCards={handleSetIdCards}
+                showFavoritesOnly={true}
+                activeVaultId={activeVaultId}
+              />
+            </div>
+          )}
+          
+          {hasFavoriteSshKeys && (
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4">SSH Keys</h3>
+              <SSHKeysSection
+                sshKeys={sshKeys}
+                setSSHKeys={handleSetSshKeys}
+                showFavoritesOnly={true}
+                activeVaultId={activeVaultId}
+              />
+            </div>
+          )}
+          
+          {hasFavoriteCryptoWallets && (
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4">Crypto Wallets</h3>
+              <CryptoSection
+                cryptoWallets={cryptoWallets}
+                setCryptoWallets={handleSetCryptoWallets}
+                showFavoritesOnly={true}
+                activeVaultId={activeVaultId}
+              />
+            </div>
+          )}
+          
+          {hasFavoriteBankAccounts && (
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4">Bank Accounts</h3>
+              <BankInfoSection
+                bankAccounts={bankAccounts}
+                setBankAccounts={handleSetBankAccounts}
+                showFavoritesOnly={true}
+                activeVaultId={activeVaultId}
+              />
+            </div>
+          )}
+          
+          {hasFavoriteLicenses && (
+            <div>
+              <h3 className="text-lg font-medium text-foreground mb-4">Software Licenses</h3>
+              <SoftwareLicensesSection
+                licenses={softwareLicenses}
+                setLicenses={handleSetSoftwareLicenses}
+                showFavoritesOnly={true}
+                activeVaultId={activeVaultId}
+              />
+            </div>
+          )}
+          
+          {counts.favorites === 0 && (
+            <div className="text-center py-12 bg-muted/30 rounded-lg border border-border">
+              <p className="text-muted-foreground">No favorites yet. Click the heart icon on any item to add it to favorites.</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    switch (activeSection) {
+      case "passwords":
+        return (
+          <PasswordsSection
+            passwords={passwords}
+            setPasswords={handleSetPasswords}
+            customCategories={customCategories}
+            setCustomCategories={setCustomCategories}
+            activeVaultId={activeVaultId}
+          />
+        );
+      case "notes":
+        return (
+          <NotesSection
+            notes={notes}
+            setNotes={handleSetNotes}
+            activeVaultId={activeVaultId}
+          />
+        );
+      case "cards":
+        return (
+          <CardsSection
+            cards={cards}
+            setCards={handleSetCards}
+            activeVaultId={activeVaultId}
+          />
+        );
+      case "addresses":
+        return (
+          <AddressesSection
+            addresses={addresses}
+            setAddresses={handleSetAddresses}
+            activeVaultId={activeVaultId}
+          />
+        );
+      case "totp":
+        return (
+          <TOTPSection
+            totps={totps}
+            setTotps={handleSetTotps}
+            activeVaultId={activeVaultId}
+          />
+        );
+      case "idcards":
+        return (
+          <IDCardsSection
+            idCards={idCards}
+            setIdCards={handleSetIdCards}
+            activeVaultId={activeVaultId}
+          />
+        );
+      case "sharing":
+        return (
+          <ShareSection
+            passwords={passwords}
+            notes={notes}
+            cards={cards}
+            addresses={addresses}
+            totps={totps}
+            idCards={idCards}
+            sshKeys={sshKeys}
+            cryptoWallets={cryptoWallets}
+            bankAccounts={bankAccounts}
+            softwareLicenses={softwareLicenses}
+          />
+        );
+      case "sshkeys":
+        return (
+          <SSHKeysSection
+            sshKeys={sshKeys}
+            setSSHKeys={handleSetSshKeys}
+            activeVaultId={activeVaultId}
+          />
+        );
+      case "crypto":
+        return (
+          <CryptoSection
+            cryptoWallets={cryptoWallets}
+            setCryptoWallets={handleSetCryptoWallets}
+            activeVaultId={activeVaultId}
+          />
+        );
+      case "bankinfo":
+        return (
+          <BankInfoSection
+            bankAccounts={bankAccounts}
+            setBankAccounts={handleSetBankAccounts}
+            activeVaultId={activeVaultId}
+          />
+        );
+      case "software":
+        return (
+          <SoftwareLicensesSection
+            licenses={softwareLicenses}
+            setLicenses={handleSetSoftwareLicenses}
+            activeVaultId={activeVaultId}
+          />
+        );
+      case "tools":
+        return <ToolsSection />;
+      default:
+        return null;
+    }
+  };
+
+
+  const handleSectionChange = (section: SectionType) => {
+    setActiveSection(section);
+    setMobileMenuOpen(false);
+  };
+
+  const sidebarProps = {
+    activeSection,
+    onSectionChange: handleSectionChange,
+    counts,
+    vaults: vaultData.vaults.map(v => ({ id: v.id, name: v.name, icon: v.icon, color: v.color })),
+    activeVaultId,
+    onVaultSelect: setActiveVaultId,
+    onAddVault: async (data: { name: string; icon: string; color: string }) => vaultData.addVault(data),
+    onUpdateVault: async (id: string, data: { name?: string; icon?: string; color?: string }) => vaultData.updateVault(id, data),
+    onDeleteVault: async (id: string) => vaultData.deleteVault(id),
+  };
+
+  return (
+    <VaultsContextProvider
+      vaults={vaultData.vaults.map(v => ({ id: v.id, name: v.name, icon: v.icon, color: v.color }))}
+      activeVaultId={activeVaultId}
+      setActiveVaultId={setActiveVaultId}
+    >
+      <SidebarProvider>
+        <div className="min-h-screen flex w-full bg-background">
+          {/* Desktop Sidebar */}
+          {!isMobile && (
+            <DashboardSidebar {...sidebarProps} />
+          )}
+          
+          <main 
+            className="flex-1 overflow-auto"
+            {...(isMobile ? swipeHandlers : {})}
+          >
+            {isMobile ? (
+              <PullToRefresh 
+                onRefresh={async () => {
+                  await vaultData.refetch();
+                  toast.success("Vault data refreshed");
+                }}
+                className="h-full"
+              >
+                <div className="p-4 sm:p-6 lg:p-8">
+                  {/* Header */}
+                  <div className="flex items-center justify-between gap-4 mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-border">
+                    <div className="flex items-center gap-3">
+                      {/* Mobile Menu Button */}
+                      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                        <SheetTrigger asChild>
+                          <Button variant="ghost" size="icon" className="shrink-0">
+                            <Menu className="w-5 h-5" />
+                            <span className="sr-only">Open menu</span>
+                          </Button>
+                        </SheetTrigger>
+                        <SheetContent side="left" className="p-0 w-72">
+                          <DashboardSidebar {...sidebarProps} isMobile />
+                        </SheetContent>
+                      </Sheet>
+                      <div className="min-w-0">
+                        <h1 className="text-xl sm:text-2xl font-bold text-foreground truncate">Welcome back!</h1>
+                        <p className="text-sm text-muted-foreground truncate">
+                          {user?.email || "Manage your secure vault"}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => navigate("/profile")}
+                      >
+                        <User className="w-4 h-4" strokeWidth={1.5} />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={handleLogout}
+                      >
+                        <LogOut className="w-4 h-4" strokeWidth={1.5} />
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Mobile Section Indicator */}
+                  <MobileSectionIndicator
+                    activeSection={activeSection}
+                    sectionOrder={sectionOrder}
+                    sectionLabels={sectionLabels}
+                  />
+
+                  {/* Active Section */}
+                  {renderSection()}
+                </div>
+              </PullToRefresh>
+            ) : (
+              <div className="p-4 sm:p-6 lg:p-8">
+                {/* Header */}
+                <div className="flex items-center justify-between gap-4 mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-border">
+                  <div className="flex items-center gap-3">
+                    <div className="min-w-0">
+                      <h1 className="text-xl sm:text-2xl font-bold text-foreground truncate">Welcome back!</h1>
+                      <p className="text-sm text-muted-foreground truncate">
+                        {user?.email || "Manage your secure vault"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => navigate("/profile")}
+                    >
+                      <User className="w-4 h-4 mr-2" strokeWidth={1.5} />
+                      Profile
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="w-4 h-4 mr-2" strokeWidth={1.5} />
+                      Logout
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Active Section */}
+                {renderSection()}
+              </div>
+            )}
+          </main>
+        </div>
+      </SidebarProvider>
+    </VaultsContextProvider>
+  );
 }

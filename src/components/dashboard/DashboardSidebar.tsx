@@ -16,6 +16,7 @@ import {
   Package,
   Wrench
 } from "lucide-react";
+import { VaultsSection, Vault } from "./VaultsSection";
 import {
   Sidebar,
   SidebarContent,

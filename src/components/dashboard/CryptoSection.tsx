@@ -388,3 +388,4 @@ export function CryptoSection({ cryptoWallets, setCryptoWallets, showFavoritesOn
     </div>
   );
 }
+

@@ -74,3 +74,4 @@ export function useEncryption() {
 export function getStoredSalt(): string | null {
   return localStorage.getItem(SALT_STORAGE_KEY);
 }
+

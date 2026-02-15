@@ -346,3 +346,4 @@ export function DashboardSidebar({
     </Sidebar>
   );
 }
+

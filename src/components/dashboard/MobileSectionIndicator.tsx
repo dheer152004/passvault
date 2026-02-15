@@ -268,3 +268,4 @@ function NoteForm({ formData, setFormData, onSubmit, submitLabel }: NoteFormProp
     </div>
   );
 }
+

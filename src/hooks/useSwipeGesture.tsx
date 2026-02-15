@@ -47,3 +47,4 @@ export function useSwipeGesture({
     onTouchEnd,
   };
 }
+

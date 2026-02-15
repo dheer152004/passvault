@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { Button } from "@/src/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
@@ -209,3 +207,4 @@ export function PasswordGenerator({ onUsePassword }: PasswordGeneratorProps) {
     </Card>
   )
 }
+

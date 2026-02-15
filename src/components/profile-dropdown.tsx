@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
 } from "@/src/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/src/components/ui/avatar"
-import { useRouter } from "next/navigation"
+import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { LogOut, Settings, User } from "lucide-react"
 
@@ -21,7 +21,7 @@ interface UserInfo {
 export function ProfileDropdown() {
   const [user, setUser] = useState<UserInfo | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const loadUser = async () => {
@@ -58,7 +58,7 @@ export function ProfileDropdown() {
   const handleLogout = async () => {
     const supabase = createClient()
     await supabase.auth.signOut()
-    router.push("/auth/login")
+    navigate("/login")
   }
 
   if (isLoading || !user) {
@@ -97,7 +97,7 @@ export function ProfileDropdown() {
           </div>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => router.push("/profile")} className="cursor-pointer">
+        <DropdownMenuItem onClick={() => navigate("/dashboard")} className="cursor-pointer">
           <Settings className="mr-2 h-4 w-4" />
           <span>Profile Settings</span>
         </DropdownMenuItem>
@@ -110,3 +110,4 @@ export function ProfileDropdown() {
     </DropdownMenu>
   )
 }
+

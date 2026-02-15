@@ -85,3 +85,4 @@ export function useAutoLogout({ timeoutSeconds, onLogout }: UseAutoLogoutOptions
 
   return { resetTimer };
 }
+

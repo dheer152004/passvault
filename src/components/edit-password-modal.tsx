@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
@@ -250,3 +248,4 @@ export function EditPasswordModal({ open, onClose, password, categories, onSucce
     </Dialog>
   )
 }
+

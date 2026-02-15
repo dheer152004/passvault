@@ -1,5 +1,3 @@
-'use client'
-
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible'
 
 function Collapsible({
@@ -31,3 +29,4 @@ function CollapsibleContent({
 }
 
 export { Collapsible, CollapsibleTrigger, CollapsibleContent }
+

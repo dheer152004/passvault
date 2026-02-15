@@ -112,3 +112,4 @@ export function useVaults() {
 }
 
 export { VAULT_ICONS, VAULT_COLORS };
+

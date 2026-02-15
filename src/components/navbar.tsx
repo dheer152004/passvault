@@ -1,7 +1,5 @@
-"use client"
-
 import { useState } from "react"
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import { ThemeToggle } from "@/src/components/theme-toggle"
 import { Menu, X } from "lucide-react"
 
@@ -22,30 +20,18 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-2 sm:gap-4">
           <ThemeToggle />
           <nav className="flex gap-1">
-            <Link href="/service" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-              Service
+            <Link to="/" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
+              Home
             </Link>
-            <Link href="/pricing" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-              Pricing
-            </Link>
-            <Link href="/faq" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-              FAQ
-            </Link>
-            <Link href="/contact" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-              Contact
-            </Link>
-            <Link href="/terms" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
+            <Link to="/terms" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
               T&C
-            </Link>
-            <Link href="/privacy" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
-              Privacy
             </Link>
           </nav>
           <div className="flex gap-2">
-            <Link href="/auth/login" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
+            <Link to="/login" className="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
               Sign in
             </Link>
-            <Link href="/auth/sign-up" className="px-3 py-2 text-sm font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700">
+            <Link to="/signup" className="px-3 py-2 text-sm font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700">
               Get started
             </Link>
           </div>
@@ -68,57 +54,29 @@ export default function Navbar() {
         <div className="md:hidden border-t border-slate-200 dark:border-slate-800">
           <div className="px-4 sm:px-6 lg:px-8 py-4 space-y-2">
             <Link
-              href="/service"
+              to="/"
               className="block px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
               onClick={() => setIsOpen(false)}
             >
-              Service
+              Home
             </Link>
             <Link
-              href="/pricing"
-              className="block px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
-              onClick={() => setIsOpen(false)}
-            >
-              Pricing
-            </Link>
-            <Link
-              href="/faq"
-              className="block px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
-              onClick={() => setIsOpen(false)}
-            >
-              FAQ
-            </Link>
-            <Link
-              href="/contact"
-              className="block px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
-              onClick={() => setIsOpen(false)}
-            >
-              Contact
-            </Link>
-            <Link
-              href="/terms"
+              to="/terms"
               className="block px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
               onClick={() => setIsOpen(false)}
             >
               Terms & Conditions
             </Link>
-            <Link
-              href="/privacy"
-              className="block px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
-              onClick={() => setIsOpen(false)}
-            >
-              Privacy Policy
-            </Link>
             <hr className="my-2 border-slate-200 dark:border-slate-800" />
             <Link
-              href="/auth/login"
+              to="/login"
               className="block px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
               onClick={() => setIsOpen(false)}
             >
               Sign in
             </Link>
             <Link
-              href="/auth/sign-up"
+              to="/signup"
               className="block px-3 py-2 text-sm font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700"
               onClick={() => setIsOpen(false)}
             >
@@ -130,3 +88,4 @@ export default function Navbar() {
     </header>
   )
 }
+

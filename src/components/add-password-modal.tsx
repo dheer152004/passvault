@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
@@ -207,3 +205,4 @@ export function AddPasswordModal({ open, onClose, categories, onSuccess }: AddPa
     </Dialog>
   )
 }
+

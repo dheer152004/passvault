@@ -439,3 +439,4 @@ export function SoftwareLicensesSection({ licenses, setLicenses, showFavoritesOn
     </div>
   );
 }
+

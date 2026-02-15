@@ -1,5 +1,3 @@
-"use client"
-
 import { useTheme } from "./theme-provider"
 import { Button } from "./ui/button"
 import { useEffect, useState } from "react"
@@ -61,3 +59,4 @@ export function ThemeToggle() {
     </Button>
   )
 }
+

@@ -12,9 +12,9 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useSwipeGesture } from "@/hooks/useSwipeGesture";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DashboardSidebar, SectionType } from "@/components/dashboard/DashboardSidebar";
-import { MobileSectionIndicator } from "@/components/dashboard/MobileSectionIndicator";
+// import { MobileSectionIndicator } from "@/components/dashboard/MobileSectionIndicator";
 import { PullToRefresh } from "@/components/dashboard/PullToRefresh";
-import { PasswordsSection, Password, Category, defaultCategories } from "@/components/dashboard/PasswordsSection";
+import { PasswordsSection, Password, Category, defaultCategories } from "@/components/dashboard/PasswordSection";
 import { NotesSection, Note } from "@/components/dashboard/NotesSection";
 import { CardsSection, Card } from "@/components/dashboard/CardsSection";
 import { AddressesSection, Address } from "@/components/dashboard/AddressesSection";
@@ -26,6 +26,7 @@ import { CryptoSection, CryptoWallet } from "@/components/dashboard/CryptoSectio
 import { BankInfoSection, BankAccount } from "@/components/dashboard/BankInfoSection";
 import { SoftwareLicensesSection, SoftwareLicense } from "@/components/dashboard/SoftwareLicensesSection";
 import { ToolsSection } from "@/components/dashboard/ToolsSection";
+import { BrowserImportBanner } from "@/components/dashboard/BrowserImportBanner";
 
 // Transform database types to component types
 const transformPassword = (p: any): Password => ({
@@ -1117,6 +1118,9 @@ export default function Dashboard() {
                     sectionLabels={sectionLabels}
                   />
 
+                  {/* Browser Import Banner */}
+                  <BrowserImportBanner />
+
                   {/* Active Section */}
                   {renderSection()}
                 </div>
@@ -1152,6 +1156,9 @@ export default function Dashboard() {
                     </Button>
                   </div>
                 </div>
+
+                {/* Browser Import Banner */}
+                <BrowserImportBanner />
 
                 {/* Active Section */}
                 {renderSection()}

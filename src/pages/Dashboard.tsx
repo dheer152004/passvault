@@ -16,10 +16,10 @@ import { DashboardSidebar, SectionType } from "@/components/dashboard/DashboardS
 import { PullToRefresh } from "@/components/dashboard/PullToRefresh";
 import { PasswordsSection, Password, Category, defaultCategories } from "@/components/dashboard/PasswordSection";
 import { NotesSection, Note } from "@/components/dashboard/NotesSection";
-import { CardsSection, Card } from "@/components/dashboard/CardsSection";
-import { AddressesSection, Address } from "@/components/dashboard/AddressesSection";
+import { CardsSection, Card } from "@/components/dashboard/CardSection";
+import { AddressesSection, Address } from "@/components/dashboard/AddressSection";
 import { TOTPSection, TOTP } from "@/components/dashboard/TOTPSection";
-import { IDCardsSection, IDCard } from "@/components/dashboard/IDCardsSection";
+import { IDCardsSection, IDCard } from "@/components/dashboard/IDCardSection";
 import { ShareSection } from "@/components/dashboard/ShareSection";
 import { SSHKeysSection, SSHKey } from "@/components/dashboard/SSHKeysSection";
 import { CryptoSection, CryptoWallet } from "@/components/dashboard/CryptoSection";

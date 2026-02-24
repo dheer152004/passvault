@@ -8,9 +8,10 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: true, // allow external access
     port: parseInt(process.env.PORT || "3000", 10),
-    allowedHosts: process.env.VITE_HOST
-      ? [process.env.VITE_HOST]
-      : undefined,
+    allowedHosts: [
+    "passvault-wii6.onrender.com",
+    ...(process.env.VITE_HOST ? [process.env.VITE_HOST] : []),
+    ],
   },
   plugins: [
     react(),

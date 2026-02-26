@@ -27,6 +27,7 @@ import { BankInfoSection, BankAccount } from "@/components/dashboard/BankInfoSec
 import { SoftwareLicensesSection, SoftwareLicense } from "@/components/dashboard/SoftwareLicensesSection";
 import { ToolsSection } from "@/components/dashboard/ToolsSection";
 import { BrowserImportBanner } from "@/components/dashboard/BrowserImportBanner";
+import {MobileSectionIndicator} from "@/components/dashboard/MobileSectionIndicator";
 
 // Transform database types to component types
 const transformPassword = (p: any): Password => ({

@@ -12,7 +12,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useSwipeGesture } from "@/hooks/useSwipeGesture";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DashboardSidebar, SectionType } from "@/components/dashboard/DashboardSidebar";
-// import { MobileSectionIndicator } from "@/components/dashboard/MobileSectionIndicator";
 import { PullToRefresh } from "@/components/dashboard/PullToRefresh";
 import { PasswordsSection, Password, Category, defaultCategories } from "@/components/dashboard/PasswordSection";
 import { NotesSection, Note } from "@/components/dashboard/NotesSection";
@@ -27,7 +26,6 @@ import { BankInfoSection, BankAccount } from "@/components/dashboard/BankInfoSec
 import { SoftwareLicensesSection, SoftwareLicense } from "@/components/dashboard/SoftwareLicensesSection";
 import { ToolsSection } from "@/components/dashboard/ToolsSection";
 import { BrowserImportBanner } from "@/components/dashboard/BrowserImportBanner";
-import {MobileSectionIndicator} from "@/components/dashboard/MobileSectionIndicator";
 
 // Transform database types to component types
 const transformPassword = (p: any): Password => ({
@@ -76,7 +74,6 @@ const transformAddress = (a: any): Address => ({
   phone: a.phone || "",
   createdAt: a.created_at?.split("T")[0] || "",
   isFavorite: a.is_favorite || false,
-  vaultId: a.vault_id || undefined,
 });
 
 const transformTOTP = (t: any): TOTP => ({
@@ -145,7 +142,6 @@ const transformBankAccount = (a: any): BankAccount => ({
   notes: a.notes || "",
   createdAt: a.created_at?.split("T")[0] || "",
   isFavorite: a.is_favorite || false,
-  vaultId: a.vault_id || undefined,
 });
 
 const transformSoftwareLicense = (l: any): SoftwareLicense => ({
@@ -413,11 +409,11 @@ export default function Dashboard() {
           state: a.state,
           postal_code: a.zipCode,
           country: a.country,
-          phone: a.phone,
+          phone: a.phone || null,
           email: null,
           notes: null,
           is_favorite: a.isFavorite || false,
-          vault_id: a.vaultId || null,
+          vault_id: null,
         });
       });
 
@@ -437,7 +433,7 @@ export default function Dashboard() {
             country: n.country,
             phone: n.phone,
             is_favorite: n.isFavorite || false,
-            vault_id: n.vaultId || null,
+            vault_id: null,
           });
         }
       });
@@ -540,8 +536,8 @@ export default function Dashboard() {
           key_type: k.keyType,
           public_key: k.publicKey,
           private_key: k.privateKey,
-          passphrase: k.passphrase,
-          notes: k.notes,
+          passphrase: k.passphrase || null,
+          notes: k.notes || null,
           is_favorite: k.isFavorite || false,
           vault_id: k.vaultId || null,
         });
@@ -580,9 +576,9 @@ export default function Dashboard() {
           name: w.name,
           wallet_type: w.walletType,
           wallet_address: w.walletAddress,
-          private_key: w.privateKey,
-          seed_phrase: w.seedPhrase,
-          notes: w.notes,
+          private_key: w.privateKey || null,
+          seed_phrase: w.seedPhrase || null,
+          notes: w.notes || null,
           is_favorite: w.isFavorite || false,
           vault_id: w.vaultId || null,
         });
@@ -622,14 +618,14 @@ export default function Dashboard() {
           bank_name: a.bankName,
           account_type: a.accountType,
           account_number: a.accountNumber,
-          routing_number: a.routingNumber,
-          iban: a.ibanNumber,
-          swift_bic: a.swiftCode,
-          branch_name: a.branchName,
+          routing_number: a.routingNumber || null,
+          iban: a.ibanNumber || null,
+          swift_bic: a.swiftCode || null,
+          branch_name: a.branchName || null,
           branch_address: a.accountHolderName,
-          notes: a.notes,
+          notes: a.notes || null,
           is_favorite: a.isFavorite || false,
-          vault_id: a.vaultId || null,
+          vault_id: null,
         });
       });
 
@@ -644,14 +640,14 @@ export default function Dashboard() {
             bank_name: n.bankName,
             account_type: n.accountType,
             account_number: n.accountNumber,
-            routing_number: n.routingNumber,
-            iban: n.ibanNumber,
-            swift_bic: n.swiftCode,
-            branch_name: n.branchName,
+            routing_number: n.routingNumber || null,
+            iban: n.ibanNumber || null,
+            swift_bic: n.swiftCode || null,
+            branch_name: n.branchName || null,
             branch_address: n.accountHolderName,
-            notes: n.notes,
+            notes: n.notes || null,
             is_favorite: n.isFavorite || false,
-            vault_id: n.vaultId || null,
+            vault_id: null,
           });
         }
       });
@@ -670,12 +666,12 @@ export default function Dashboard() {
           name: l.name,
           software_type: l.software,
           license_key: l.licenseKey,
-          email: l.email,
-          password: l.password,
-          purchase_date: l.purchaseDate,
-          expiry_date: l.expiryDate,
-          website: l.website,
-          notes: l.notes,
+          email: l.email || null,
+          password: l.password || null,
+          purchase_date: l.purchaseDate || null,
+          expiry_date: l.expiryDate || null,
+          website: l.website || null,
+          notes: l.notes || null,
           is_favorite: l.isFavorite || false,
           vault_id: l.vaultId || null,
         });
@@ -719,12 +715,12 @@ export default function Dashboard() {
   const vaultPasswords = passwords.filter(p => matchesVault(p.vaultId));
   const vaultNotes = notes.filter(n => matchesVault(n.vaultId));
   const vaultCards = cards.filter(c => matchesVault(c.vaultId));
-  const vaultAddresses = addresses.filter(a => matchesVault(a.vaultId));
+  const vaultAddresses = addresses; // Addresses don't have vaultId
   const vaultTotps = totps.filter(t => matchesVault(t.vaultId));
   const vaultIdCards = idCards.filter(i => matchesVault(i.vaultId));
   const vaultSshKeys = sshKeys.filter(s => matchesVault(s.vaultId));
   const vaultCryptoWallets = cryptoWallets.filter(c => matchesVault(c.vaultId));
-  const vaultBankAccounts = bankAccounts.filter(b => matchesVault(b.vaultId));
+  const vaultBankAccounts = bankAccounts; // Bank accounts don't have vaultId
   const vaultSoftwareLicenses = softwareLicenses.filter(s => matchesVault(s.vaultId));
 
   // Calculate counts for sidebar based on active vault
@@ -837,7 +833,6 @@ export default function Dashboard() {
                 addresses={addresses}
                 setAddresses={handleSetAddresses}
                 showFavoritesOnly={true}
-                activeVaultId={activeVaultId}
               />
             </div>
           )}
@@ -955,7 +950,6 @@ export default function Dashboard() {
           <AddressesSection
             addresses={addresses}
             setAddresses={handleSetAddresses}
-            activeVaultId={activeVaultId}
           />
         );
       case "totp":
@@ -1010,7 +1004,6 @@ export default function Dashboard() {
           <BankInfoSection
             bankAccounts={bankAccounts}
             setBankAccounts={handleSetBankAccounts}
-            activeVaultId={activeVaultId}
           />
         );
       case "software":
@@ -1113,11 +1106,11 @@ export default function Dashboard() {
                   </div>
 
                   {/* Mobile Section Indicator */}
-                  <MobileSectionIndicator
+                  {/* <MobileSectionIndicator
                     activeSection={activeSection}
                     sectionOrder={sectionOrder}
                     sectionLabels={sectionLabels}
-                  />
+                  /> */}
 
                   {/* Browser Import Banner */}
                   <BrowserImportBanner />

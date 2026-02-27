@@ -673,7 +673,7 @@ export default function Profile() {
                     <span className="text-sm text-muted-foreground">Username</span>
                   </div>
                   <span className="text-sm text-foreground font-medium">
-                    {rofile?.username || <span className="text-muted-foreground italic">Not set</span>}
+                    {profile?.username || <span className="text-muted-foreground italic">Not set</span>}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-3 border-b border-border">

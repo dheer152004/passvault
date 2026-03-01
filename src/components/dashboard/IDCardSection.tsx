@@ -442,6 +442,7 @@ interface IDCardFormProps {
     expiryDate: string;
     issuingAuthority: string;
     notes: string;
+    vaultId: string | undefined;
   };
   setFormData: React.Dispatch<React.SetStateAction<{
     name: string;
@@ -453,6 +454,7 @@ interface IDCardFormProps {
     expiryDate: string;
     issuingAuthority: string;
     notes: string;
+    vaultId: string | undefined;
   }>>;
   onSubmit: () => void;
   submitLabel: string;

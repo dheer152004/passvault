@@ -429,7 +429,7 @@ interface CardFormProps {
     cvv: string;
     cardholderName: string;
     cardType: string;
-    vaultId?: string;
+    vaultId: string | undefined;
   };
   setFormData: React.Dispatch<React.SetStateAction<{
     name: string;
@@ -438,7 +438,7 @@ interface CardFormProps {
     cvv: string;
     cardholderName: string;
     cardType: string;
-    vaultId?: string;
+    vaultId: string | undefined;
   }>>;
   onSubmit: () => void;
   submitLabel: string;

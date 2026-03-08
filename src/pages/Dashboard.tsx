@@ -1053,7 +1053,7 @@ export default function Dashboard() {
           )}
           
           <main 
-            className="flex-1 overflow-auto"
+            className="flex-1 overflow-auto md:pl-64 transition-all duration-200"
             {...(isMobile ? swipeHandlers : {})}
           >
             {isMobile ? (
